@@ -1,9 +1,3 @@
--- Telegram Earning Bot Database Schema
--- Run this SQL in your MySQL/phpMyAdmin
-
-CREATE DATABASE IF NOT EXISTS `earning_bot` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE `earning_bot`;
-
 -- Settings table
 CREATE TABLE `settings` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
@@ -23,7 +17,7 @@ INSERT INTO `settings` (`key_name`, `value`) VALUES
 ('bot_token', 'YOUR_BOT_TOKEN_HERE'),
 ('bot_username', 'YourBotUsername');
 
--- Channels (force join)
+-- Channels
 CREATE TABLE `channels` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `title` VARCHAR(255) NOT NULL,
@@ -67,9 +61,7 @@ CREATE TABLE `task_logs` (
     `status` ENUM('started','completed') DEFAULT 'started',
     `started_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     `completed_at` TIMESTAMP NULL,
-    INDEX `idx_user_task` (`user_id`, `task_id`),
-    FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE,
-    FOREIGN KEY (`task_id`) REFERENCES `tasks`(`id`) ON DELETE CASCADE
+    INDEX (`user_id`, `task_id`)
 ) ENGINE=InnoDB;
 
 -- Withdrawals
@@ -81,9 +73,7 @@ CREATE TABLE `withdrawals` (
     `number` VARCHAR(50) NOT NULL,
     `status` ENUM('pending','approved','rejected') DEFAULT 'pending',
     `admin_note` TEXT DEFAULT NULL,
-    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB;
 
 -- Broadcast logs
